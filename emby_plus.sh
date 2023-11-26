@@ -6,10 +6,10 @@ if [ $1 ]; then
 	cpu_arch=$(uname -m)
 	case $cpu_arch in
                 "x86_64" | *"amd64"*)
-                        docker pull emby/embyserver:4.7.14.0
+                        docker pull emby/embyserver
 			;;
                 "aarch64" | *"arm64"* | *"armv8"* | *"arm/v8"*)
-                        docker pull emby/embyserver_arm64v8:4.7.14.0
+                        docker pull emby/embyserver_arm64v8
                         ;;
                 *)
                         echo "目前只支持intel64和amd64架构，你的架构是：$cpu_arch"
@@ -17,7 +17,7 @@ if [ $1 ]; then
                         ;;
         esac
 	
-	docker_exist=$(docker images |grep emby/embyserver |grep 4.7.14.0)
+	docker_exist=$(docker images |grep emby/embyserver |grep)
 	if [ -z "$docker_exist" ]; then
 		echo "拉取镜像失败，请检查网络，或者翻墙后再试"
 		exit 1
@@ -96,14 +96,14 @@ if [ $1 ]; then
 	wget -q -O /tmp/Emby.Server.Implementations.dll http://docker.xiaoya.pro/Emby.Server.Implementations.dll
 	case $cpu_arch in
 		"x86_64" | *"amd64"*)
-			docker run -d --name emby -v $1/config:/config -v $1/xiaoya:/media --net=host --user 0:0 --restart always emby/embyserver:4.7.14.0
+			docker run -d --name emby -v $1/config:/config -v $1/xiaoya:/media --net=host --user 0:0 --restart always emby/embyserver
 			docker cp /tmp/Emby.Server.Implementations.dll emby:/system/
 			docker exec -i emby chmod 644 /system/Emby.Server.Implementations.dll
 			docker restart emby
 			echo "一键全家桶全部安装完成"
 			;;
 		"aarch64" | *"arm64"* | *"armv8"* | *"arm/v8"*)
-		        docker run -d --name emby -v $1/config:/config -v $1/xiaoya:/media --net=host  --user 0:0 --restart always emby/embyserver_arm64v8:4.7.14.0
+		        docker run -d --name emby -v $1/config:/config -v $1/xiaoya:/media --net=host  --user 0:0 --restart always emby/embyserver_arm64v8
 			docker cp /tmp/Emby.Server.Implementations.dll emby:/system/
                         docker exec -i emby chmod 644 /system/Emby.Server.Implementations.dll
                         docker restart emby
