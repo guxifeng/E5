@@ -17,7 +17,7 @@ if [ $1 ]; then
                         ;;
         esac
 	
-	docker_exist=$(docker images |grep emby/embyserver |grep)
+	docker_exist=$(docker images |grep emby/embyserver)
 	if [ -z "$docker_exist" ]; then
 		echo "拉取镜像失败，请检查网络，或者翻墙后再试"
 		exit 1
